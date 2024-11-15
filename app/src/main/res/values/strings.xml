@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">FakeQQMusic</string>
+    <string name="title_home">首页</string>
+    <string name="title_dashboard">直播</string>
+    <string name="title_Myzone">我的</string>
+    <string name="title_notifications">社区</string>
+    <string name="user_name_star">愿相知</string>
+    <string name="user_all">大家都在听</string>
+    <string name="user_list">歌单</string>
+    <!-- WelcomeActivity -->
+    <string name="label_WelcomeActivity_line1">F a k e</string>
+    <string name="label_WelcomeActivity_line2">QQ 音乐</string>
+    <string name="label_WelcomeActivity_line3">- 快去享受音乐吧 -</string>
+    <!-- Dialog -->
+    <!-- 权限提示Dialog -->
+    <string name="label_Dialog_get_tips">权限获取和使用提示</string>
+    <string name="label_Dialog_get_tips_welcome">Hi,欢迎使用FakeQQMusic</string>
+    <string name="label_Dialog_get_tips_confirm">同意</string>
+    <string name="label_Dialog_get_tips_cancel">不同意退出APP >></string>
+</resources>

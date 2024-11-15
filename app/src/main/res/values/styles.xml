@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--圆形进度条-->
+    <declare-styleable name="RoundProgressView">
+        <attr name="radius" format="dimension"/>
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="strokeColor" format="color"/>
+    </declare-styleable>
+    <style name="neteasa_music_time_text_sytle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ccc</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="neteasa_music_time_seek_bar_sytle"
+        parent="Widget.AppCompat.SeekBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:thumb">@drawable/seekbar_selector</item>
+        <item name="android:progressDrawable">@drawable/seekbar_color</item>
+    </style>
+</resources>

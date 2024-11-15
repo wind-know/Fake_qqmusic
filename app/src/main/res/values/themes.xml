@@ -1,0 +1,42 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.FakeQQMusic" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="fontFamily">@font/siyuanzhenhei</item>
+        <item name="android:fontFamily">@font/siyuanzhenhei</item>
+    </style>
+    <!--  Dialog样式 -->
+    <style name="DialogTheme" parent="@android:style/Theme.Dialog">
+        <!--  边框  -->
+        <item name="android:windowFrame">@null</item>
+        <!--  是否浮现在activity之上  -->
+        <item name="android:windowIsFloating">true</item>
+        <!--  半透明  -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--  无标题  -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <!--  背景透明  -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--  模糊  -->
+        <!-- item name="android:backgroundDimEnabled">true</item -->
+        <!--  遮罩层  -->
+        <item name="android:backgroundDimAmount">0.39</item>
+        <!--  禁用默认的打开动画  -->
+        <!-- item name="android:windowAnimationStyle">@null</item -->
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.FakeQQMusic" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+</resources>

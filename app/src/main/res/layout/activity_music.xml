@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.fakeqqmusic.base.myview.BackgourndAnimationRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_blackground"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.musicplay.MusicActivity">
+
+
+    <include
+        android:id="@+id/discview"
+        layout="@layout/base_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rlMusicTime"
+        android:layout_below="@id/ivMusicout" />
+    <ImageView
+        android:id="@+id/ivMusicout"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/icon_out" />
+    <ImageView
+        android:id="@+id/ivMusicshare"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/icon_share" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="60dp"
+        android:layout_above="@+id/rlMusicTime">
+
+        <TextView
+            android:id="@+id/tvMusicName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:text="海阔天空"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMusicAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:text="周杰伦"
+            android:textColor="@color/gray1"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMusicName" />
+
+        <ImageView
+            android:id="@+id/ivHeart"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/icon_nice_no"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvMusicAuthor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="歌词"
+            android:layout_margin="10dp"
+
+            android:textColor="@color/gray1"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/tvMusicAuthor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlMusicTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llPlayOption"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
+
+        <TextView
+            android:id="@+id/tvCurrentTime"
+            style="@style/neteasa_music_time_text_sytle"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            tools:text="01:34" />
+
+        <SeekBar
+            android:id="@+id/musicSeekBar"
+            style="@style/neteasa_music_time_seek_bar_sytle"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/tvTotalTime"
+            android:layout_toEndOf="@id/tvCurrentTime"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp" />
+
+        <TextView
+            android:id="@+id/tvTotalTime"
+            style="@style/neteasa_music_time_text_sytle"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            tools:text="05:34" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llPlayOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/ivchange"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_change_one" />
+
+        <ImageView
+            android:id="@+id/ivLast"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_last" />
+
+        <ImageView
+            android:id="@+id/ivPlayOrPause"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/icon_playa" />
+
+        <ImageView
+            android:id="@+id/ivNext"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_next" />
+
+        <ImageView
+            android:id="@+id/ivlist"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:src="@drawable/icon_plylist" />
+    </LinearLayout>
+</com.example.fakeqqmusic.base.myview.BackgourndAnimationRelativeLayout>
+
+

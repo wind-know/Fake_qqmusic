@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="search_size">35dp</dimen>
+    <dimen name="star_icon">25dp</dimen>
+</resources>
