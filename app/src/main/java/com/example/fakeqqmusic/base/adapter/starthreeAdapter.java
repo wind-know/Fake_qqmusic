@@ -38,6 +38,11 @@ public class starthreeAdapter extends RecyclerView.Adapter<starthreeAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull starthreeAdapter.ViewHolder holder, int position) {
+        holder.binding.getRoot().setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), MusicActivity.class);
+            intent.putExtra("MUSIC_INDEX", position);
+            v.getContext().startActivity(intent);
+        });
         List<musicData> currentItem1 = mlist.get(position);
         musicData.DataDTO current1 = currentItem1.get(0).getData();
         Glide.with(holder.itemView)
@@ -100,6 +105,7 @@ public class starthreeAdapter extends RecyclerView.Adapter<starthreeAdapter.View
                 holder.isNo[2] = !holder.isNo[2];
            }
         });
+
 
     }
 

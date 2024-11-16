@@ -373,8 +373,11 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(MusicService.ACTION_STATUS_MUSIC_PLAY)) {
-                playPauseButton.setImageResource(R.drawable.icon_noplay);
-                playPauseButton.setTag(R.drawable.icon_noplay);
+                int currentDrawableId = (int) playPauseButton.getTag();
+                if (currentDrawableId == R.drawable.icon_playa) {
+                    playPauseButton.setImageResource(R.drawable.icon_noplay);
+                    playPauseButton.setTag(R.drawable.icon_noplay);
+                }
                 int currentindex = intent.getIntExtra(MusicService.PARAM_MUSIC_NOW_MUSIC_INDEX, 0);
                 Glide.with(context) // 获取图片的URL
                         .load(mMusicDatas.get(currentindex).getData().getPicurl()) // 加载图片
@@ -407,8 +410,11 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
 
 
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_PAUSE)) {
-                playPauseButton.setImageResource(R.drawable.icon_playa);
-                playPauseButton.setTag(R.drawable.icon_playa);
+                int currentDrawableId = (int) playPauseButton.getTag();
+                if (currentDrawableId != R.drawable.icon_playa) {
+                    playPauseButton.setImageResource(R.drawable.icon_playa);
+                    playPauseButton.setTag(R.drawable.icon_playa);
+                }
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_DURATION)) {
 
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_COMPLETE)) {
