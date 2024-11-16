@@ -58,7 +58,9 @@ public class starAdapter extends RecyclerView.Adapter<starAdapter.ViewHolder>{
         holder.binding.musicName.setText(currentItem.getName());
         holder.binding.musicSinger.setText(currentItem.getArtistsname());
         holder.binding.getRoot().setOnClickListener(v -> {
-            v.getContext().startActivity(new Intent( v.getContext(), MusicActivity.class));
+            Intent intent = new Intent(v.getContext(), MusicActivity.class);
+            intent.putExtra("MUSIC_INDEX", position);
+            v.getContext().startActivity(intent);
         });
     }
 

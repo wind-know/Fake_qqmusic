@@ -38,6 +38,7 @@ public class MyZoneFragment extends Fragment implements MyZoneContract.View{
     }
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mpresenter.onstart();
+
     }
 
     @Override

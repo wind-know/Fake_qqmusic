@@ -4,39 +4,48 @@ import static com.example.fakeqqmusic.ui.musicplay.MusicActivity.PARAM_MUSIC_LIS
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.fakeqqmusic.R;
 import com.example.fakeqqmusic.base.adapter.starAdapter;
-import com.example.fakeqqmusic.base.maneger.ActivityManager;
 import com.example.fakeqqmusic.base.myview.DiscView;
 import com.example.fakeqqmusic.base.network.musicData;
 import com.example.fakeqqmusic.base.welcome.ImmersiveStatusBarUtil;
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
     private ImageView musicPic;
     private ImageView playPauseButton;
     private List<musicData> mMusicDatas;
+    private TextView songTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +104,9 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
 
     private void initService() {
 
-            Intent intent = new Intent(this, MusicService.class);
-            intent.putExtra(PARAM_MUSIC_LIST, (Serializable) mMusicDatas);
-            startService(intent);
+        Intent intent = new Intent(this, MusicService.class);
+        intent.putExtra(PARAM_MUSIC_LIST, (Serializable) mMusicDatas);
+        startService(intent);
 
     }
 
@@ -178,7 +188,21 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
             ft.commit();
             return true;
         });
+        setKeyboardVisibilityListener(findViewById(android.R.id.content), new OnKeyboardVisibilityListener() {
+            @Override
+            public void onKeyboardShow() {
+                if (playerView.isAttachedToWindow()) {
+                    playerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onKeyboardHide() {
+                playerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
+    private boolean isPlayerViewAdded = false;
     private void addWindow() {
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         playerView = LayoutInflater.from(this).inflate(R.layout.myplayitem, null);
@@ -203,10 +227,13 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
 
         int navBarHeight = getNavBarHeight()+30;
         layoutParams.y = navBarHeight;
-
-        windowManager.addView(playerView, layoutParams);
+        if(!isPlayerViewAdded) {
+            windowManager.addView(playerView, layoutParams);
+            isPlayerViewAdded = true;
+        }
         playlist = playerView.findViewById(R.id.playlist);
         musicPic = playerView.findViewById(R.id.music_pic);
+        songTitle = playerView.findViewById(R.id.songTitle);
         playPauseButton = playerView.findViewById(R.id.playPauseButton);
         playPauseButton.setTag(R.drawable.icon_playa);
         playlist.setOnClickListener(v -> {
@@ -216,13 +243,14 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         playPauseButton.setOnClickListener(v -> {
             Log.d("ButtonClick", "Play/Pause button clicked");
             int currentDrawableId = (int) playPauseButton.getTag();
+
             if (currentDrawableId != R.drawable.icon_playa) {
                 // 如果正在播放，发送暂停命令
                 Intent pauseIntent = new Intent(MusicService.ACTION_OPT_MUSIC_PAUSE);
                 playPauseButton.setImageResource(R.drawable.icon_playa);
                 playPauseButton.setTag(R.drawable.icon_playa);
                 LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(pauseIntent);
-            } else {
+            } else if(currentDrawableId == R.drawable.icon_playa){
                 initService();
                 // 如果暂停，发送播放命令
                 Log.d("ButtonClick", "P播放命令");
@@ -234,11 +262,12 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         });
         musicPic.setOnClickListener(v -> {
             Toast.makeText(this, "点击了悬浮窗", Toast.LENGTH_SHORT).show();
-            windowManager.removeView(playerView);
+            playerView.setVisibility(View.GONE);
             Intent intent = new Intent(MainActivity.this, MusicActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
+
     }
 
     private int getNavBarHeight() {
@@ -254,20 +283,16 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
     @Override
     protected void onResume() {
         super.onResume();
-        if (playerView == null) {
-            addWindow();
-        }
+        playerView.setVisibility(View.VISIBLE);
     }
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (playerView == null) {
-            addWindow();
-        }
+        playerView.setVisibility(View.VISIBLE);
     }
     @Override
     protected void onDestroy(){
-        if (playerView != null) {
+        if (playerView.isAttachedToWindow()) {
             WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             windowManager.removeView(playerView);
         }
@@ -282,7 +307,6 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-//        adapter.openLoadAnimation();
         mBottomSheetDialog.setContentView(layout);
         mBottomSheetDialog.show();
     }
@@ -294,7 +318,27 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         musicNameTextView.setText(musicName+" - "+musicAuthor);
 
     }
-
+    public static void setKeyboardVisibilityListener(final View rootView, final OnKeyboardVisibilityListener listener) {
+        rootView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                Rect rect = new Rect();
+                rootView.getWindowVisibleDisplayFrame(rect);
+                int screenHeight = rootView.getHeight();
+                int keypadHeight = screenHeight - rect.bottom;
+                if (keypadHeight > screenHeight * 0.15) { // If keyboard is more than 15% of the screen height, consider it open
+                    listener.onKeyboardShow();
+                } else {
+                    listener.onKeyboardHide();
+                }
+                return true;
+            }
+        });
+    }
+    public interface OnKeyboardVisibilityListener {
+        void onKeyboardShow();
+        void onKeyboardHide();
+    }
     @Override
     public void onMusicPicChanged(String musicPicRes) {
         new Thread(new Runnable() {
@@ -311,7 +355,18 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
     public void onMusicChanged(DiscView.MusicChangedStatus musicChangedStatus) {
 
     }
-
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else {
+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        }
+    }
 
     class MusicReceiver extends BroadcastReceiver {
         @Override
@@ -319,21 +374,48 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
             String action = intent.getAction();
             if (action.equals(MusicService.ACTION_STATUS_MUSIC_PLAY)) {
                 playPauseButton.setImageResource(R.drawable.icon_noplay);
+                playPauseButton.setTag(R.drawable.icon_noplay);
                 int currentindex = intent.getIntExtra(MusicService.PARAM_MUSIC_NOW_MUSIC_INDEX, 0);
                 Glide.with(context) // 获取图片的URL
                         .load(mMusicDatas.get(currentindex).getData().getPicurl()) // 加载图片
-                        .into(musicPic);
+                        .into(new SimpleTarget<Drawable>() {
+                            @Override
+                            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                musicPic.setImageDrawable(resource);
+
+                                // 将 Drawable 转换为 Bitmap
+                                Bitmap bitmap = drawableToBitmap(resource);
+                                // 使用 Palette 提取主色调
+                                if (bitmap != null) {
+                                    Palette.from(bitmap).generate(palette -> {
+                                        if (palette != null) {
+                                            // 提取主色调
+                                            int dominantColor = palette.getDominantColor(0xFF000000); // 默认黑色
+                                            // 设置背景颜色
+                                            playerView.setBackgroundColor(dominantColor);
+                                        }
+                                    });
+                                }
+                            }
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                // 可选：处理占位图
+                            }
+
+                        });
+                songTitle.setText(mMusicDatas.get(currentindex).getData().getName()+" - "+mMusicDatas.get(currentindex).getData().getArtistsname());
+
+
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_PAUSE)) {
                 playPauseButton.setImageResource(R.drawable.icon_playa);
+                playPauseButton.setTag(R.drawable.icon_playa);
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_DURATION)) {
-//                int duration = intent.getIntExtra(MusicService.PARAM_MUSIC_DURATION, 0);
-//                updateMusicDurationInfo(duration);
+
             } else if (action.equals(MusicService.ACTION_STATUS_MUSIC_COMPLETE)) {
-//                    boolean isOver = intent.getBooleanExtra(MusicService.PARAM_MUSIC_IS_OVER, true);
-//                    complete(isOver);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MusicService.ACTION_OPT_MUSIC_NEXT));
             }
 
         }
+
     }
 }

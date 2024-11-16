@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="70dp"
     android:fitsSystemWindows="true">
 
     <ScrollView
@@ -19,6 +20,7 @@
             android:id="@+id/image"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
+            android:paddingBottom="70dp"
             android:src="@drawable/zhibo1" />
     </ScrollView>
 

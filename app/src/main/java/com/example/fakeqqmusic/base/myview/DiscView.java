@@ -1,4 +1,5 @@
 package com.example.fakeqqmusic.base.myview;
+
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class DiscView extends RelativeLayout {
     private ImageView mIvNeedle;
-    private ViewPager mVpContain;
+    public ViewPager mVpContain;
     private ViewPagerAdapter mViewPagerAdapter;
     private ObjectAnimator mNeedleAnimator;
 
@@ -84,7 +85,9 @@ public class DiscView extends RelativeLayout {
 
     public interface IPlayInfo {
         public void onMusicInfoChanged(String musicName, String musicAuthor);
+
         public void onMusicPicChanged(String url);
+
         public void onMusicChanged(MusicChangedStatus musicChangedStatus);
     }
 
@@ -124,6 +127,9 @@ public class DiscView extends RelativeLayout {
         mDiscBlackground.setLayoutParams(layoutParams);
     }
 
+    private boolean isfalseBroadcastSent = true; // 初始化为 false，表示还未发送过 next 广播
+
+
     private void initViewPager() {
         mViewPagerAdapter = new ViewPagerAdapter();
         mVpContain = (ViewPager) findViewById(R.id.vpDiscContain);
@@ -131,6 +137,7 @@ public class DiscView extends RelativeLayout {
         mVpContain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int lastPositionOffsetPixels = 0;
             int currentItem = 0;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int
                     positionOffsetPixels) {
@@ -153,17 +160,22 @@ public class DiscView extends RelativeLayout {
                 lastPositionOffsetPixels = positionOffsetPixels;
             }
 
-            @Override
+                        @Override
             public void onPageSelected(int position) {
                 resetOtherDiscAnimation(position);
                 notifyMusicPicChanged(position);
                 if (position > currentItem) {
-                    notifyMusicStatusChanged(MusicChangedStatus.NEXT);
+                    if(isfalseBroadcastSent){
+                        isfalseBroadcastSent = false;
+                    }else {
+                        notifyMusicStatusChanged(MusicChangedStatus.NEXT);
+                    }
                 } else {
                     notifyMusicStatusChanged(MusicChangedStatus.LAST);
                 }
                 currentItem = position;
             }
+
 
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -177,6 +189,7 @@ public class DiscView extends RelativeLayout {
         layoutParams.setMargins(0, marginTop, 0, 0);
         mVpContain.setLayoutParams(layoutParams);
     }
+
     private void resetOtherDiscAnimation(int position) {
         for (int i = 0; i < mDiscLayouts.size(); i++) {
             if (position == i) continue;
@@ -274,6 +287,7 @@ public class DiscView extends RelativeLayout {
                     }
                 }
             }
+
             @Override
             public void onAnimationCancel(Animator animator) {
 
@@ -299,6 +313,7 @@ public class DiscView extends RelativeLayout {
                 (getResources(), bitmapDisc);
         return roundDiscDrawable;
     }
+
     public void setMusicDataList(List<musicData> musicDataList) {
         if (musicDataList.isEmpty()) return;
         mDiscLayouts.clear();
@@ -323,6 +338,7 @@ public class DiscView extends RelativeLayout {
             mIPlayInfo.onMusicPicChanged(musicData.getData().getPicurl());
         }
     }
+
     private void tryLoadAndSetDrawable(final ImageView disc, String musicPicUrl) {
         int discSize = (int) (mWidth * DisplayUtil.SCALE_DISC_SIZE);
         int musicPicSize = (int) (mWidth * DisplayUtil.SCALE_MUSIC_PIC_SIZE);
@@ -355,6 +371,7 @@ public class DiscView extends RelativeLayout {
                     }
                 });
     }
+
     private Bitmap getBitmapFromDrawable(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -415,7 +432,7 @@ public class DiscView extends RelativeLayout {
          * */
         if (musicStatus == MusicStatus.STOP) {
             notifyMusicStatusChanged(MusicChangedStatus.STOP);
-        }else if (musicStatus == MusicStatus.PAUSE) {
+        } else if (musicStatus == MusicStatus.PAUSE) {
             notifyMusicStatusChanged(MusicChangedStatus.PAUSE);
         }
     }
@@ -494,6 +511,7 @@ public class DiscView extends RelativeLayout {
             mVpContain.setCurrentItem(currentItem + 1, true);
         }
     }
+
     public void last() {
         int currentItem = mVpContain.getCurrentItem();
         if (currentItem == 0) {
@@ -503,9 +521,11 @@ public class DiscView extends RelativeLayout {
             mVpContain.setCurrentItem(currentItem - 1, true);
         }
     }
+
     public boolean isPlaying() {
         return musicStatus == MusicStatus.PLAY;
     }
+
     private void selectMusicWithButton() {
         if (musicStatus == MusicStatus.PLAY) {
             mIsNeedback = true;
@@ -514,6 +534,7 @@ public class DiscView extends RelativeLayout {
             play();
         }
     }
+
     class ViewPagerAdapter extends PagerAdapter {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
@@ -521,14 +542,17 @@ public class DiscView extends RelativeLayout {
             container.addView(discLayout);
             return discLayout;
         }
+
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView(mDiscLayouts.get(position));
         }
+
         @Override
         public int getCount() {
             return mDiscLayouts.size();
         }
+
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;

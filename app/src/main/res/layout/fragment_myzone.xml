@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     android:paddingTop="10dp"
+    android:paddingBottom="70dp"
     tools:context=".ui.fragment.myzone.MyZoneFragment">
 
     <Toolbar
@@ -297,6 +298,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/textView_shuru"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -487,11 +489,15 @@
                     android:id="@+id/recyclerview_tuijiangedan"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
+                    android:paddingBottom="70dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewtuijiangedan"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                app:layout_constraintBottom_toBottomOf="parent">
+            </View>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

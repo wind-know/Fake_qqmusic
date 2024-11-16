@@ -19,6 +19,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
 import android.view.View;
@@ -76,6 +77,7 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
     private ActivityMusicBinding binding;
     private boolean isNo = false;
     private MusicContract.Presenter mPresenter;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +122,6 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
         mIvNext.setOnClickListener(this);
         mIvPlayOrPause.setOnClickListener(this);
         mIvHeart.setOnClickListener(this);
-
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -142,6 +143,13 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
         mTvMusicDuration.setText(MusicTime(0));
         mTvTotalMusicDuration.setText(MusicTime(0));
         mDisc.setMusicDataList(mMusicDatas);
+        ViewPager viewPager = mDisc.mVpContain;
+        position = getIntent().getIntExtra("MUSIC_INDEX", 0);
+        Log.e("ButtonClick", position + "viewPager");
+        viewPager.setCurrentItem(position, true);
+
+        mDisc.notifyMusicInfoChanged(position);
+
     }
 
     private void stopUpdateSeekBarProgree() {
@@ -166,8 +174,9 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
         // 启动服务
         Intent intent = new Intent(this, MusicService.class);
         intent.putExtra(PARAM_MUSIC_LIST, (Serializable) mMusicDatas);
+        intent.putExtra("MUSIC_INDEX", getIntent().getIntExtra("MUSIC_INDEX", 0));
+        Log.e("ButtonClick",  getIntent().getIntExtra("MUSIC_INDEX", 0) + "");
         startService(intent);
-
     }
 
     private void UpdateMusicPicBackground(final String imageUrl) {
@@ -271,7 +280,6 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
-//        adapter.openLoadAnimation();
         mBottomSheetDialog.setContentView(layout);
         mBottomSheetDialog.show();
     }

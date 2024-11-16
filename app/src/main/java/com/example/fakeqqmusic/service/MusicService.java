@@ -55,6 +55,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("ButtonClick", "onStartCommand: ");
         initMusicDatas(intent);
+        mCurrentMusicIndex = intent.getIntExtra("MUSIC_INDEX", 0);
         play(mCurrentMusicIndex);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -93,7 +94,6 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     private void play(final int index) {
         Log.d("ButtonClick", "play: " + index);
         try {
-            Log.d("MusicService", "play: in" );
             Log.d("ButtonClick", "play:in " + index);
             Log.d("ButtonClick", "play: "+mMusicDatas.size());
             if (index >= mMusicDatas.size()) return;
@@ -102,10 +102,6 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                 mMediaPlayer.start();
             } else {
                 Log.d("ButtonClick", "play:out " + index);
-//                if(mMediaPlayer != null){
-//                    mMediaPlayer.stop();
-//                    mMediaPlayer = null;
-//                }
                 if (mMediaPlayer!= null && mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
                     mMediaPlayer.reset(); // 调用reset可以让MediaPlayer回到Initialized状态，方便重新设置数据源等操作
@@ -135,7 +131,8 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                 int duration = mMediaPlayer.getDuration();
                 sendMusicDurationBroadCast(duration);
             }
-            sendMusicStatusBroadCast(ACTION_STATUS_MUSIC_PLAY);
+            sendMusicStatusBroadCast(ACTION_STATUS_MUSIC_PLAY,index);
+            Log.d("ButtonClick", "play:last " + index);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -146,7 +143,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
 
         mMediaPlayer.pause();
         mIsMusicPause = true;
-        sendMusicStatusBroadCast(ACTION_STATUS_MUSIC_PAUSE);
+        sendMusicStatusBroadCast(ACTION_STATUS_MUSIC_PAUSE,mCurrentMusicIndex);
     }
 
     private void stop() {
@@ -188,12 +185,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(ACTION_OPT_MUSIC_PLAY)) {
+                Log.d("ButtonClick", "play ok ");
                 play(mCurrentMusicIndex);
             } else if (action.equals(ACTION_OPT_MUSIC_PAUSE)) {
                 pause();
             } else if (action.equals(ACTION_OPT_MUSIC_LAST)) {
                 last();
             } else if (action.equals(ACTION_OPT_MUSIC_NEXT)) {
+                Log.d("ButtonClick", "next ok ");
                 next();
             } else if (action.equals(ACTION_OPT_MUSIC_SEEK_TO)) {
                 seekTo(intent);
@@ -211,11 +210,11 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         intent.putExtra(PARAM_MUSIC_DURATION, duration);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-    private void sendMusicStatusBroadCast(String action) {
+    private void sendMusicStatusBroadCast(String action,int index) {
         Intent intent = new Intent(action);
         if (action.equals(ACTION_STATUS_MUSIC_PLAY)) {
             intent.putExtra(PARAM_MUSIC_CURRENT_POSITION,mMediaPlayer.getCurrentPosition());
-            intent.putExtra(PARAM_MUSIC_NOW_MUSIC_INDEX,mCurrentMusicIndex);
+            intent.putExtra(PARAM_MUSIC_NOW_MUSIC_INDEX , index);
         }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
