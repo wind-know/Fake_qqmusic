@@ -34,7 +34,7 @@
 
 # 直播:
 
-![image-20241117015620073](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117015620073.png)zhe
+![image-20241117015620073](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117015620073.png)
 
 这个界面没有什么东西，因为对于原版来说，也就是recycleview的网格布局（甚至不是瀑布流），不过能动的封面倒是有点意思，虽然没写，但是之后可以学习一下。
 
