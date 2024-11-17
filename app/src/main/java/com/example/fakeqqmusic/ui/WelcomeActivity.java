@@ -27,6 +27,7 @@ import com.example.fakeqqmusic.base.welcome.GetTipsDialog;
 import com.example.fakeqqmusic.base.welcome.ImmersiveStatusBarUtil;
 import com.example.fakeqqmusic.base.myview.TextCircleView;
 import com.example.fakeqqmusic.databinding.ActivityWelcomeBinding;
+import com.permissionx.guolindev.PermissionX;
 
 public class WelcomeActivity extends AppCompatActivity {
 

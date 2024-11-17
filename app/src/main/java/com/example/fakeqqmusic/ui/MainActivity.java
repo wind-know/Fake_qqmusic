@@ -199,7 +199,9 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
 
             @Override
             public void onKeyboardHide() {
-                playerView.setVisibility(View.VISIBLE);
+                if(playerView!= null) {
+                    playerView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -281,11 +283,15 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        playerView.setVisibility(View.VISIBLE);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        if(playerView!=null){
+//            if (playerView.isAttachedToWindow() && playerView.getVisibility() == View.GONE) {
+//                playerView.setVisibility(View.VISIBLE);
+//            }
+//        }
+//    }
     @Override
     protected void onRestart() {
         super.onRestart();

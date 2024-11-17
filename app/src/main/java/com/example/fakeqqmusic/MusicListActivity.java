@@ -88,16 +88,12 @@ public class MusicListActivity extends AppCompatActivity {
                     binding.title.setAlpha(alphaTitle);
                     binding.bottomContent.setAlpha(alphaBottomContent);
                 }
-
-                // 判断标题的透明度是否需要更新并执行动画（和之前类似）
                 if (currentAlphaTitle!= alphaTitle) {
                     AlphaAnimation alphaAnimationTitle = new AlphaAnimation(currentAlphaTitle, alphaTitle);
                     alphaAnimationTitle.setDuration(0);
                     alphaAnimationTitle.setFillAfter(true);
                     binding.title.startAnimation(alphaAnimationTitle);
                 }
-
-                // 判断底部内容的透明度是否需要更新并执行动画
                 if (currentAlphaBottomContent!= alphaBottomContent) {
                     AlphaAnimation alphaAnimationBottomContent = new AlphaAnimation(currentAlphaBottomContent, alphaBottomContent);
                     alphaAnimationBottomContent.setDuration(0);
