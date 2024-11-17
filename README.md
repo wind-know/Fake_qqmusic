@@ -66,7 +66,7 @@
 
 # 播放：
 
-![image-20241117020757395](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117020757395.png)
+![image-20241117160550774](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117160550774.png)
 
 这个界面是播放的界面
 
@@ -79,6 +79,7 @@
 1. 一些动画效果如转盘转动，唱针的动画
 2. viewpager与服务的联动效果
 3. 加载网络图片与唱盘合成一张图片
+4. 背景白色蒙版使图标清晰，随歌曲切换背景图
 
 
 
@@ -88,10 +89,28 @@
 
 
 
-
+这是歌单列表，点击之后会启动对应的歌曲界面
 
 
 
 
 
 ![image-20241117021840091](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117021840091.png)
+
+底部的window会跟随当前播放的歌曲来变化，变化颜色，图片等，颜色是提取的主色调
+
+
+
+![image-20241117160830304](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117160830304.png)
+
+点击歌单（横向的大图）
+
+![image-20241117160841282](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117160841282.png)
+
+进入歌曲列表白色蒙版覆盖在图片上面，使得内容比较清楚
+
+随着上滑内容会渐变隐藏，标题栏会逐渐出现
+
+![image-20241117161117757](https://gitee.com/wind-know/mypic/raw/master/img/image-20241117161117757.png)
+
+唱盘界面的动画，随着音乐的播放与暂停，唱针会进行动画接近唱盘或远离
