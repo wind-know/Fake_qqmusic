@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.fakeqqmusic.MusicListActivity;
 import com.example.fakeqqmusic.R;
 import com.example.fakeqqmusic.base.network.musicData;
 import com.example.fakeqqmusic.databinding.ItemMusicListBigBinding;
@@ -27,6 +28,7 @@ import com.google.android.material.card.MaterialCardView;
 import androidx.palette.graphics.Palette;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 public class musiclistAdapter extends RecyclerView.Adapter<musiclistAdapter.ViewHolder> {
@@ -86,7 +88,10 @@ public class musiclistAdapter extends RecyclerView.Adapter<musiclistAdapter.View
             holder.binding.textView.setText(currentItem1.getData().getName() + "  " + currentItem1.getData().getArtistsname());
         }
         holder.binding.getRoot().setOnClickListener(v -> {
-            v.getContext().startActivity(new Intent(v.getContext(), MusicActivity.class));
+//            v.getContext().startActivity(new Intent(v.getContext(), MusicActivity.class));
+            Intent intent = new Intent(v.getContext(), MusicListActivity.class);
+            intent.putExtra("MUSIC_LIST", (Serializable) ItemList);
+            v.getContext().startActivity(intent);
         });
     }
 

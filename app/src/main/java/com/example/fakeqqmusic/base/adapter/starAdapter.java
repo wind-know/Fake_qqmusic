@@ -40,6 +40,7 @@ public class starAdapter extends RecyclerView.Adapter<starAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.d("MUSIC_LIST", "onBindViewHolder: " + position);
         musicData currentItem1 = starItemList.get(position);
         musicData.DataDTO currentItem = currentItem1.getData();
         holder.binding.musicNice.setOnClickListener(v -> {
@@ -59,7 +60,11 @@ public class starAdapter extends RecyclerView.Adapter<starAdapter.ViewHolder>{
         holder.binding.musicSinger.setText(currentItem.getArtistsname());
         holder.binding.getRoot().setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), MusicActivity.class);
-            intent.putExtra("MUSIC_INDEX", position);
+            if(position>6){
+                intent.putExtra("MUSIC_INDEX", 0);
+            }else {
+                intent.putExtra("MUSIC_INDEX", position);
+            }
             v.getContext().startActivity(intent);
         });
     }

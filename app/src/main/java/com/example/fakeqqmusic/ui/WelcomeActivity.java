@@ -74,7 +74,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ImmersiveStatusBarUtil.transparentBar(this, false);
-
         super.onCreate(savedInstanceState);
         binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -127,7 +126,6 @@ public class WelcomeActivity extends AppCompatActivity {
         if (tv_line != null) tv_line = null;
         if (tv_time != null) tv_time = null;
         if (mUIRootLayout != null) mUIRootLayout = null;
-
     }
 
     @Override

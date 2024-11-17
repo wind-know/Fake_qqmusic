@@ -1,5 +1,6 @@
 package com.example.fakeqqmusic.ui;
 
+import static com.example.fakeqqmusic.MusicListActivity.adjustTextColorBasedOnBackground;
 import static com.example.fakeqqmusic.ui.musicplay.MusicActivity.PARAM_MUSIC_LIST;
 
 import android.Manifest;
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
     public void onMusicChanged(DiscView.MusicChangedStatus musicChangedStatus) {
 
     }
-    private Bitmap drawableToBitmap(Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         } else {
@@ -386,16 +387,27 @@ public class MainActivity extends AppCompatActivity  implements DiscView.IPlayIn
                             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                                 musicPic.setImageDrawable(resource);
 
-                                // 将 Drawable 转换为 Bitmap
                                 Bitmap bitmap = drawableToBitmap(resource);
-                                // 使用 Palette 提取主色调
                                 if (bitmap != null) {
                                     Palette.from(bitmap).generate(palette -> {
-                                        if (palette != null) {
-                                            // 提取主色调
-                                            int dominantColor = palette.getDominantColor(0xFF000000); // 默认黑色
-                                            // 设置背景颜色
+                                        if (palette!= null) {
+                                            Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+                                            Palette.Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
+                                            Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+
+                                            int dominantColor;
+                                            if (vibrantSwatch!= null) {
+                                                dominantColor = vibrantSwatch.getRgb();
+                                            } else if (lightVibrantSwatch!= null) {
+                                                dominantColor = lightVibrantSwatch.getRgb();
+                                            } else if (darkVibrantSwatch!= null) {
+                                                dominantColor = darkVibrantSwatch.getRgb();
+                                            } else {
+                                                dominantColor = 0xFF000000;
+                                            }
+
                                             playerView.setBackgroundColor(dominantColor);
+                                            songTitle.setTextColor(adjustTextColorBasedOnBackground(dominantColor));
                                         }
                                     });
                                 }

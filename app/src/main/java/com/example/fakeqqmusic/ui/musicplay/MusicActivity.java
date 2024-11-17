@@ -40,6 +40,7 @@ import com.example.fakeqqmusic.base.adapter.starAdapter;
 import com.example.fakeqqmusic.base.myview.BackgourndAnimationRelativeLayout;
 import com.example.fakeqqmusic.base.myview.DiscView;
 import com.example.fakeqqmusic.base.network.musicData;
+import com.example.fakeqqmusic.base.welcome.ImmersiveStatusBarUtil;
 import com.example.fakeqqmusic.databinding.ActivityMusicBinding;
 import com.example.fakeqqmusic.service.MusicService;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -81,6 +82,7 @@ public class MusicActivity extends AppCompatActivity implements DiscView.IPlayIn
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ImmersiveStatusBarUtil.transparentBar(this, false);
         super.onCreate(savedInstanceState);
         binding = ActivityMusicBinding.inflate(getLayoutInflater()); // 使用ViewBinding初始化
         setContentView(binding.getRoot());
